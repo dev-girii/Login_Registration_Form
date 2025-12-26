@@ -1,10 +1,10 @@
 <?php
-// Basic DB config - update with real credentials before use
+// Basic DB config - read from environment variables in production
 // MySQL (PDO)
-$DB_HOST = '127.0.0.1';
-$DB_NAME = 'login_demo';
-$DB_USER = 'root';
-$DB_PASS = '';
+$DB_HOST = getenv('DB_HOST') ?: '127.0.0.1';
+$DB_NAME = getenv('DB_NAME') ?: 'login_demo';
+$DB_USER = getenv('DB_USER') ?: 'root';
+$DB_PASS = getenv('DB_PASS') ?: '';
 $DSN = "mysql:host={$DB_HOST};dbname={$DB_NAME};charset=utf8mb4";
 $PDO_OPTIONS = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -12,8 +12,8 @@ $PDO_OPTIONS = [
 ];
 
 // MongoDB
-$MONGO_URI = 'mongodb://127.0.0.1:27017';
-$MONGO_DB = 'login_demo';
+$MONGO_URI = getenv('MONGO_URI') ?: 'mongodb://127.0.0.1:27017';
+$MONGO_DB = getenv('MONGO_DB') ?: 'login_demo';
 
 // Notes:
 // - Create MySQL table `users` before use:

@@ -1,0 +1,10 @@
+# Optional Render service definition (example). Replace repo with your GitHub repo when using Render's "Infrastructure as Code" support.
+services:
+  - type: web
+    name: login-register-form
+    env: docker
+    plan: free
+    repo: https://github.com/<YOUR-USER>/Login_Registration_Form
+    branch: main
+    buildCommand: ""
+    startCommand: ""
