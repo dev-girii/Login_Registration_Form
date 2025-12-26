@@ -31,6 +31,53 @@ Steps
    - Set the Environment variables listed above in the Render Service Settings -> Environment
    - Start the service. Render will run the Docker build and deploy.
 
+
+   Using MySQL on Render (user-managed via Docker)
+
+   Render provides fully-managed Postgres, but for MySQL you'll run a MySQL server as a private Docker service in Render (user-managed). This is supported and commonly done — you'll be responsible for backups and maintenance. Steps:
+
+   - Create a new private service in Render using the official MySQL Docker image:
+      1. In Render dashboard -> New -> Private Service -> Docker
+      2. Set the Docker image to `mysql:8.0` (or your preferred MySQL image and tag).
+      3. Configure Environment Variables for the MySQL container (for example):
+          - MYSQL_ROOT_PASSWORD (required by the official MySQL image)
+          - MYSQL_DATABASE (e.g. login_demo)
+          - MYSQL_USER (optional)
+          - MYSQL_PASSWORD (if MYSQL_USER set)
+      4. Under the service Settings -> Network, make sure this private service is in the same Render team and has a private network so your Web Service can reach it.
+
+   - In your Web Service (the PHP app):
+      - Set environment variables to point to the MySQL private service. Render exposes private services with internal hostnames; check the service details for the host name (usually format like `private-service-name.internal`). Example env vars:
+         - DB_HOST=your-mysql-private-host
+         - DB_NAME=login_demo
+         - DB_USER=MYSQL_USER (or root)
+         - DB_PASS=MYSQL_PASSWORD (or MYSQL_ROOT_PASSWORD)
+
+   - Initialize the schema:
+      - Connect to the MySQL container via `mysql` client or Render's dashboard console and run the SQL in `php/config.php` comments or the example SQL in this doc:
+
+   ```sql
+   CREATE TABLE users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      fullname VARCHAR(255) NOT NULL,
+      username VARCHAR(100) NOT NULL UNIQUE,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password_hash VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
+   ```
+
+   - Connect the services:
+      - Ensure your Web Service and MySQL private service are in the same Render team and that your Web Service's environment `DB_HOST` points to the private service hostname. Deploy your Web Service after setting the env vars.
+
+   Notes & recommendations
+   - Backups: since this MySQL is user-managed on Render, configure backups yourself (e.g., use a backup container or scheduled jobs to dump and store the SQL elsewhere).
+   - Security: restrict network access to the private service and rotate credentials when needed.
+   - Alternative: if you prefer a fully-managed DB, consider a managed MySQL provider (PlanetScale, Google Cloud SQL, Amazon RDS) and connect via their connection details; you'll still set `DB_HOST`, `DB_USER`, etc. in Render.
+
+   This repo's Dockerfile includes the PHP MongoDB driver and MySQL PDO support (PDO is built into PHP image). You don't need Postgres support anymore. Configure env vars as described and deploy.
+
+
 4) Database setup
    - MySQL: Create the `users` table in the configured MySQL instance (Render managed DB or external). Example SQL (run once):
 

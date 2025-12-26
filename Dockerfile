@@ -20,6 +20,8 @@ RUN pecl channel-update pecl.php.net \
   && pecl install mongodb \
   && docker-php-ext-enable mongodb
 
+# (Postgres support removed) Keep Dockerfile minimal for PHP + Mongo + MySQL PDO support
+
 # Enable Apache rewrite if you need it
 RUN a2enmod rewrite
 
