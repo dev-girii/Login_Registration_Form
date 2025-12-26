@@ -1,0 +1,25 @@
+/* Minimal custom styles for layout and spacing */
+body {
+  background-color: #f8f9fa;
+}
+.card {
+  border: none;
+}
+.avatar {
+  width: 72px;
+  height: 72px;
+  font-weight: 600;
+}
+
+/* Keep forms comfortable on small screens */
+@media (max-width: 576px) {
+  .card-body { padding: 1rem; }
+}
+
+.container { max-width: 960px; }
+
+/* utility */
+.gap-2 { gap: .5rem; }
+
+/* small visual tweak for header */
+header.bg-light { background-image: linear-gradient(0deg, rgba(255,255,255,0.6), rgba(255,255,255,0.6)); }
