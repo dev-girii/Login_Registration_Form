@@ -12,7 +12,7 @@ $PDO_OPTIONS = [
 ];
 
 // MongoDB
-$MONGO_URI = getenv('MONGO_URI') ?: 'mongodb://127.0.0.1:27017';
+$MONGO_URI = getenv('MONGO_URI') ?: 'mongodb+srv://dev-girii:2oF9NeWNVMnf9dPp@cluster0.ea2zhma.mongodb.net/';
 $MONGO_DB = getenv('MONGO_DB') ?: 'login_demo';
 
 // Notes:
